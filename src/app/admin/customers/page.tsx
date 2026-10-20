@@ -1,0 +1,8 @@
+import { AdminFrame } from "@/components/admin/admin-frame";
+import { requireAdmin } from "@/lib/require-admin";
+import { getDatabase } from "@/lib/db";
+
+export default async function AdminCustomersPage() {
+  await requireAdmin(); const database = getDatabase(); const customers = database ? (await database.query<{ email: string; full_name: string; orders: string; last_order: string }>("select email, max(full_name) full_name, count(*)::text orders, max(created_at)::text last_order from public.orders group by email order by max(created_at) desc limit 100")).rows : [];
+  return <AdminFrame active="Customers"><main className="mx-auto max-w-7xl p-4 md:p-8"><div className="mb-8"><p className="text-xs font-semibold uppercase tracking-[.2em] text-[#a27815]">Customers</p><h1 className="mt-1 text-3xl font-semibold">Customer directory</h1><p className="mt-2 text-sm text-slate-500">People who have placed orders with Comfort Hub.</p></div><div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">{customers.length ? <div className="divide-y">{customers.map((customer) => <div key={customer.email} className="flex flex-wrap items-center justify-between gap-3 px-5 py-4"><div><p className="font-medium">{customer.full_name}</p><p className="text-sm text-slate-500">{customer.email}</p></div><div className="text-right text-sm"><p>{customer.orders} order{customer.orders === "1" ? "" : "s"}</p><p className="text-xs text-slate-500">Last order {new Date(customer.last_order).toLocaleDateString("en-NG")}</p></div></div>)}</div> : <div className="p-16 text-center"><p className="font-medium">No customers yet</p><p className="mt-1 text-sm text-slate-500">Customer profiles will be created from completed orders.</p></div>}</div></main></AdminFrame>;
+}

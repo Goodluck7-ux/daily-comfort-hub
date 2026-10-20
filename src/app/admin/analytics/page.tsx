@@ -1,0 +1,9 @@
+import { AdminFrame } from "@/components/admin/admin-frame";
+import { requireAdmin } from "@/lib/require-admin";
+import { getDatabase } from "@/lib/db";
+import { formatNaira } from "@/lib/format";
+
+export default async function AdminAnalyticsPage() {
+  await requireAdmin(); const database = getDatabase(); const metrics = database ? (await database.query<{ revenue: string; average: string; paid: string; pending: string }>("select coalesce(sum(total_kobo) filter (where status = 'paid'), 0)::text revenue, coalesce(avg(total_kobo) filter (where status = 'paid'), 0)::text average, count(*) filter (where status = 'paid')::text paid, count(*) filter (where status = 'pending')::text pending from public.orders")).rows[0] : { revenue: "0", average: "0", paid: "0", pending: "0" };
+  return <AdminFrame active="Analytics"><main className="mx-auto max-w-7xl p-4 md:p-8"><div className="mb-8"><p className="text-xs font-semibold uppercase tracking-[.2em] text-[#a27815]">Analytics</p><h1 className="mt-1 text-3xl font-semibold">Store performance</h1><p className="mt-2 text-sm text-slate-500">A simple view of sales performance from your real orders.</p></div><div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{[["Paid revenue", formatNaira(Number(metrics.revenue))], ["Average order", formatNaira(Number(metrics.average))], ["Paid orders", metrics.paid], ["Pending orders", metrics.pending]].map(([label, value]) => <div key={label} className="rounded-2xl border border-slate-200 bg-white p-5"><p className="text-sm text-slate-500">{label}</p><p className="mt-3 text-2xl font-semibold">{value}</p></div>)}</div><div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center"><p className="font-medium">More insights will appear as sales come in</p><p className="mt-1 text-sm text-slate-500">Product performance and category trends are ready for the next reporting pass.</p></div></main></AdminFrame>;
+}

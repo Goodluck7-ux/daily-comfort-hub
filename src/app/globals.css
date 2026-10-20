@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+body {
+  background: #fbfaf7;
+  color: #171717;
+  font-family: Inter, "Avenir Next", "Segoe UI", sans-serif;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+button, a { -webkit-tap-highlight-color: transparent; }
+
+::selection { background: #fed7aa; color: #171717; }
+
+details > summary::-webkit-details-marker { display: none; }
+details[open] > div { animation: comfort-dropdown 180ms cubic-bezier(.22, 1, .36, 1) both; transform-origin: top center; }
+
+@keyframes comfort-dropdown {
+  from { opacity: 0; transform: translateY(-6px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes comfort-card-in {
+  from { opacity: 0; transform: translateY(22px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes comfort-logo-pulse {
+  0%, 100% { transform: scale(1); opacity: .9; }
+  50% { transform: scale(1.04); opacity: 1; }
+}
+
+@keyframes comfort-hero-drift {
+  0%, 100% { transform: scale(1.02) translate3d(0, 0, 0); }
+  50% { transform: scale(1.07) translate3d(-1%, -1%, 0); }
+}
+
+@keyframes comfort-glow-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); opacity: .55; }
+  50% { transform: translate3d(-18px, 14px, 0); opacity: .85; }
+}
+
+@keyframes comfort-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(calc(-50% - .375rem), 0, 0); }
+}
+
+@keyframes comfort-marquee-reverse {
+  from { transform: translate3d(calc(-50% - .375rem), 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+.category-marquee { animation: comfort-marquee 26s linear infinite !important; animation-play-state: running !important; will-change: transform; }
+.category-marquee--reverse { animation-name: comfort-marquee-reverse !important; }
+.category-marquee:hover { animation-play-state: paused !important; }
+
+.animate-card-in { animation: comfort-card-in 620ms cubic-bezier(.22, 1, .36, 1) both; }
+.animate-logo-pulse { animation: comfort-logo-pulse 1.8s ease-in-out infinite; }
+.hero-image { animation: comfort-hero-drift 14s ease-in-out infinite; }
+.hero-glow { animation: comfort-glow-drift 8s ease-in-out infinite; }
+.hero-shell { isolation: isolate; }
+.hero-cta { box-shadow: 0 12px 28px rgb(15 23 42 / 16%); }
+.nav-link { position: relative; }
+.nav-link::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -8px; height: 2px; border-radius: 999px; background: #f0c85c; transition: right 220ms cubic-bezier(.22, 1, .36, 1); }
+.nav-link:hover::after, .nav-link[data-active="true"]::after { right: 0; }
+
+@keyframes comfort-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes comfort-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes comfort-slide-up {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes comfort-account-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes comfort-account-drawer {
+  from { opacity: 0; transform: translateX(-18px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-comfort-fade-up { animation: comfort-fade-up 520ms cubic-bezier(.22, 1, .36, 1) both; }
+.animate-comfort-fade-in { animation: comfort-fade-in 420ms ease-out both; }
+.animate-comfort-slide-up { animation: comfort-slide-up 420ms cubic-bezier(.22, 1, .36, 1) both; }
+.animate-account-in { animation: comfort-account-in 520ms cubic-bezier(.22, 1, .36, 1) both; }
+.animate-account-drawer { animation: comfort-account-drawer 300ms cubic-bezier(.22, 1, .36, 1) both; }
+.account-stagger-1 { animation-delay: 70ms; }
+.account-stagger-2 { animation-delay: 140ms; }
+.account-stagger-3 { animation-delay: 210ms; }
+.account-stagger-4 { animation-delay: 280ms; }
+.account-stagger-5 { animation-delay: 350ms; }
+.motion-delay-1 { animation-delay: 80ms; }
+.motion-delay-2 { animation-delay: 160ms; }
+.motion-delay-3 { animation-delay: 240ms; }
+.motion-delay-4 { animation-delay: 320ms; }
+
+.admin-input { margin-top: .375rem; height: 2.75rem; width: 100%; border-radius: .625rem; border: 1px solid rgb(226 232 240); background: white; padding: 0 .75rem; font-size: .875rem; outline: none; transition: border-color 150ms ease, box-shadow 150ms ease; }
+.admin-input:focus, .admin-textarea:focus { border-color: rgb(217 173 61); box-shadow: 0 0 0 3px rgb(217 173 61 / 15%); }
+.admin-textarea { margin-top: .375rem; min-height: 6rem; width: 100%; resize: vertical; border-radius: .625rem; border: 1px solid rgb(226 232 240); padding: .75rem; font-size: .875rem; outline: none; transition: border-color 150ms ease, box-shadow 150ms ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+  details[open] > div { animation: none; }
+  .category-marquee { animation-duration: 60s !important; }
+  .hero-image, .hero-glow { animation: none !important; }
+}

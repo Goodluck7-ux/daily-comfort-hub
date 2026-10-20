@@ -1,0 +1,13 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Field, SelectField } from "@/components/storefront/ui";
+
+export function AddressForm({ onDone }: { onDone: () => void }) {
+  const router = useRouter();
+  const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
+  async function submit(event: React.FormEvent<HTMLFormElement>) { event.preventDefault(); setSaving(true); setError(""); const values = new FormData(event.currentTarget); const response = await fetch("/api/account/addresses", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ label: values.get("label"), recipientName: values.get("recipientName"), phone: values.get("phone"), address: values.get("address"), state: values.get("state"), city: values.get("city"), postalCode: values.get("postalCode"), isDefault: values.get("isDefault") === "on" }) }); if (!response.ok) { const result = await response.json() as { error?: string }; setError(result.error || "Unable to save address."); setSaving(false); return; } event.currentTarget.reset(); setSaving(false); onDone(); router.refresh(); }
+  return <form onSubmit={submit} className="space-y-4 rounded-xl border bg-white p-5"><div className="grid gap-4 sm:grid-cols-2"><Field name="label" label="Address label" placeholder="Home" /><Field name="recipientName" label="Recipient name" required placeholder="John Doe" /><Field name="phone" label="Phone number" required placeholder="+234 801 234 5678" /><Field name="city" label="City" required placeholder="Lagos" /><SelectField name="state" label="State" required placeholder="Select state" /><Field name="postalCode" label="Postal code" placeholder="100001" /></div><label className="block"><span className="mb-1.5 block text-xs font-medium text-neutral-700">Street address <span className="text-red-500">*</span></span><textarea name="address" required placeholder="House number, street, landmark" className="min-h-20 w-full resize-none rounded-lg border border-neutral-200 p-3 text-sm outline-none focus:border-black focus:ring-2 focus:ring-orange-100" /></label><label className="flex items-center gap-2 text-xs text-neutral-600"><input name="isDefault" type="checkbox" className="accent-black" /> Make this my default address</label>{error && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</p>}<button type="submit" disabled={saving} className="rounded-lg bg-black px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60">{saving ? "Saving…" : "Save address"}</button></form>;
+}
