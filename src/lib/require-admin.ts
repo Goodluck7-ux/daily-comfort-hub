@@ -20,12 +20,12 @@ export async function hasAdminAccess(email: string) {
 
 export async function requireAdmin() {
   const user = await getSessionUser();
-  if (!user || !(await hasAdminAccess(user.email))) redirect("/account");
+  if (!user || !(await hasAdminAccess(user.email))) redirect("/account?admin=denied");
   return user;
 }
 
 export async function requireBootstrapAdmin() {
   const user = await getSessionUser();
-  if (!user || !isAdminEmail(user.email)) redirect("/account");
+  if (!user || !isAdminEmail(user.email)) redirect("/account?admin=denied");
   return user;
 }

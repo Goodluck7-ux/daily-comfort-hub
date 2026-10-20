@@ -20,6 +20,7 @@ export function SiteHeader() {
   const [query, setQuery] = useState("");
   const active = (href: string) => href === "/" ? pathname === "/" : pathname.startsWith(href);
   function submitSearch(event: FormEvent) { event.preventDefault(); const value = query.trim(); if (value) router.push(`/shop?search=${encodeURIComponent(value)}`); setSearchOpen(false); }
+  if (pathname.startsWith("/account")) return null;
   return (
     <>
       <div className="bg-[#f5f5f4] text-xs font-bold tracking-[0.01em] text-neutral-900 md:text-[13px]">

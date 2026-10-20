@@ -11,14 +11,13 @@ import { RelatedProducts } from "@/components/product/related-products";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getCatalogProductBySlug((await params).slug);
   if (!product) return { title: "Product not found" };
   return { title: `${product.name} | Daily Comfort Hub`, description: product.summary, openGraph: { images: product.images[0] ? [product.images[0]] : [] } };
-}
-
-export async function generateStaticParams() {
-  return (await getCatalogProducts()).map((product) => ({ slug: product.slug }));
 }
 
 export default async function ProductPage({ params }: Props) {
